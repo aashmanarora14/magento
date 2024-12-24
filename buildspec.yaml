@@ -3,15 +3,23 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      php: 8.3
+      php: 8.3  # Use PHP 8.3 for Magento 2.4.7-p2
     commands:
-
-      - echo Installing PHP sodium extension...
+      # Install PHP dependencies and tools
+      - echo Installing PHP dependencies...
       - sudo apt-get update
-      - sudo apt-get install -y php8.3-sodium
-      
-      # Skip Composer installation since it's already installed
-      - echo Using existing Composer installation...
+      - sudo apt-get install -y php-pear php8.3-dev
+
+      # Install Sodium extension via PECL
+      - echo Installing Sodium extension...
+      - sudo pecl install libsodium
+
+      # Enable the Sodium extension
+      - echo "extension=sodium.so" | sudo tee -a /etc/php/8.3/cli/php.ini
+      - echo "extension=sodium.so" | sudo tee -a /etc/php/8.3/nginx/php.ini
+
+      # Install Magento dependencies
+      - echo Installing Composer...
       - echo Installing Magento dependencies...
       - composer install
 
