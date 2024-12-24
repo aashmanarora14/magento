@@ -5,6 +5,11 @@ phases:
     runtime-versions:
       php: 8.3
     commands:
+
+      - echo Installing PHP sodium extension...
+      - sudo apt-get update
+      - sudo apt-get install -y php8.3-sodium
+      
       # Skip Composer installation since it's already installed
       - echo Using existing Composer installation...
       - echo Installing Magento dependencies...
