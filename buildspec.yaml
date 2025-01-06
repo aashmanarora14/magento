@@ -2,23 +2,20 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      php: 8.3  # Use PHP 8.3 for Magento 2.4.7-p2
     commands:
-    
-      - sudo apt-get update
-      - echo Installing Composer...
-      - echo Installing Magento dependencies...
+      - echo "Using pre-installed PHP and Composer"
+      - apt-get update -y  # Keep this to update the system, but not PHP
+      - apt-get install -y git unzip curl  # Only install other dependencies if needed
 
   build:
     commands:
-      - echo Building Magento application...
+      - echo "Building Magento"
+      - composer install --no-dev  # This will use the pre-installed Composer
+      - chmod -R 777 var/ generated/
+      - php bin/magento setup:upgrade
+      - php bin/magento setup:di:compile
+      - php bin/magento setup:static-content:deploy -f  # Added -f to force deploy even if no changes
 
   post_build:
     commands:
-      - echo Build completed successfully.
-
-artifacts:
-  files:
-    - '**/*'
-  base-directory: 'pub'
+      - echo "Build Completed"
