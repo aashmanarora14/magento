@@ -2,20 +2,21 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      php: 8.x
     commands:
-      - echo "Using pre-installed PHP and Composer"
-      - apt-get update -y  # Update system packages (but not PHP)
-
+      - echo Installing dependencies...
+      - sudo apt update
+      - sudo apt install -y git unzip php-cli php-mbstring php-xml php-curl php-zip
+      - composer install --no-dev --prefer-dist
   build:
     commands:
-      - echo "Building Magento"
-      # Install dependencies with '--ignore-platform-reqs' to ignore the sodium extension requirement
-      - composer install --no-dev --ignore-platform-reqs
-      - chmod -R 777 var/ generated/  # Ensure the correct permissions are set for Magento directories
-      # - php bin/magento setup:upgrade --ignore-platform-reqs  # Ignore platform requirements during setup upgrade
-      - php bin/magento setup:di:compile  # Compile dependency injection configurations
-      - php bin/magento setup:static-content:deploy -f  # Deploy static content (force flag added)
-
-  post_build:
-    commands:
-      - echo "Build Completed"
+      - echo Build started
+      - echo Building Magento
+      - php bin/magento setup:upgrade
+      - php bin/magento deploy:mode:set production
+      - php bin/magento cache:flush
+artifacts:
+  files:
+    - '**/*'
+  base-directory: 'pub'
