@@ -5,7 +5,6 @@ phases:
     commands:
       - echo "Using pre-installed PHP and Composer"
       - apt-get update -y  # Keep this to update the system, but not PHP
-      - apt-get install -y git unzip curl  # Only install other dependencies if needed
 
   build:
     commands:
