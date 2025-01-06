@@ -4,16 +4,17 @@ phases:
   install:
     commands:
       - echo "Using pre-installed PHP and Composer"
-      - apt-get update -y  # Keep this to update the system, but not PHP
+      - apt-get update -y  # Update system packages (but not PHP)
 
   build:
     commands:
       - echo "Building Magento"
-      - composer install --no-dev --ignore-platform-req=ext-sodium
-      - chmod -R 777 var/ generated/
-      - php bin/magento setup:upgrade
-      - php bin/magento setup:di:compile
-      - php bin/magento setup:static-content:deploy -f  # Added -f to force deploy even if no changes
+      # Install dependencies with '--ignore-platform-reqs' to ignore the sodium extension requirement
+      - composer install --no-dev --ignore-platform-reqs
+      - chmod -R 777 var/ generated/  # Ensure the correct permissions are set for Magento directories
+      - php bin/magento setup:upgrade --ignore-platform-reqs  # Ignore platform requirements during setup upgrade
+      - php bin/magento setup:di:compile  # Compile dependency injection configurations
+      - php bin/magento setup:static-content:deploy -f  # Deploy static content (force flag added)
 
   post_build:
     commands:
