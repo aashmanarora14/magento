@@ -9,7 +9,7 @@ phases:
   build:
     commands:
       - echo "Building Magento"
-      - composer install --no-dev  # This will use the pre-installed Composer
+      - composer install --no-dev --ignore-platform-req=ext-sodium
       - chmod -R 777 var/ generated/
       - php bin/magento setup:upgrade
       - php bin/magento setup:di:compile
