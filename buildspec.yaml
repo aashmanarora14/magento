@@ -7,8 +7,6 @@ phases:
     commands:
       - echo Installing dependencies...
       - sudo apt update
-      - sudo apt install -y git unzip php-cli php-mbstring php-xml php-curl php-zip
-      - composer install --no-dev --prefer-dist
   build:
     commands:
       - echo Build started
